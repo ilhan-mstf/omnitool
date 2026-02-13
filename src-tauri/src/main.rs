@@ -3,17 +3,21 @@
 
 mod tools;
 mod detector;
-use tools::{Tool, ToolInput, ToolOutput, base64_tool::Base64Tool};
+use tools::{Tool, ToolInput, ToolOutput, base64_tool::Base64Tool, json_tool::JsonTool};
 
 #[tauri::command]
-fn detect_clipboard(text: String) -> Option<String> {
-    detector::detect(&text).map(|res| res.tool_id.to_string())
+fn detect_clipboard(text: String) -> Option<detector::DetectionResult> {
+    println!("Backend detecting text (len: {})", text.len());
+    let res = detector::detect(&text);
+    println!("Detection result: {:?}", res);
+    res
 }
 
 #[tauri::command]
 fn execute_tool(id: String, input: ToolInput) -> ToolOutput {
     let tool: Box<dyn Tool> = match id.as_str() {
         "base64" => Box::new(Base64Tool),
+        "json_formatter" => Box::new(JsonTool),
         _ => return ToolOutput {
             result: "".to_string(),
             error: Some(format!("Tool '{}' not found", id)),

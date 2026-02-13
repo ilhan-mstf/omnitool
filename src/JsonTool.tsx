@@ -7,18 +7,19 @@ interface ToolOutput {
   error: string | null;
 }
 
-interface Base64ToolProps {
+interface JsonToolProps {
   initialValue?: string;
-  initialAction?: 'encode' | 'decode';
+  initialIndent?: number;
 }
 
-export default function Base64Tool({ initialValue = '', initialAction = 'encode' }: Base64ToolProps) {
+export default function JsonTool({ initialValue = '', initialIndent = 2 }: JsonToolProps) {
   const [input, setInput] = useState(initialValue);
   const [output, setOutput] = useState('');
-  const [mode, setMode] = useState<'encode' | 'decode'>(initialAction);
+  const [indent, setIndent] = useState(initialIndent);
+  const [minify, setMinify] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const handleExecute = async (val: string, currentMode: string) => {
+  const handleExecute = async (val: string, currentIndent: number, isMinify: boolean) => {
     if (!val) {
       setOutput('');
       setError(null);
@@ -27,10 +28,10 @@ export default function Base64Tool({ initialValue = '', initialAction = 'encode'
 
     try {
       const res: ToolOutput = await invoke('execute_tool', {
-        id: 'base64',
+        id: 'json_formatter',
         input: {
           value: val,
-          options: { action: currentMode }
+          options: { indent: currentIndent, minify: isMinify }
         }
       });
 
@@ -43,58 +44,51 @@ export default function Base64Tool({ initialValue = '', initialAction = 'encode'
       }
     } catch (err) {
       setError(String(err));
-      console.error("Backend Error:", err);
     }
   };
 
   useEffect(() => {
     const delayDebounceFn = setTimeout(() => {
-      handleExecute(input, mode);
+      handleExecute(input, indent, minify);
     }, 150);
 
     return () => clearTimeout(delayDebounceFn);
-  }, [input, mode]);
-
-  const copyToClipboard = () => {
-    if (output) {
-      navigator.clipboard.writeText(output);
-    }
-  };
+  }, [input, indent, minify]);
 
   return (
     <div className="flex flex-col h-full animate-in fade-in duration-300">
       <div className="flex items-center justify-between mb-6">
         <div>
-          <h2 className="text-2xl font-bold">Base64 Encoder/Decoder</h2>
-          <p className="text-zinc-400">Convert text to and from Base64 encoding.</p>
+          <h2 className="text-2xl font-bold">JSON Formatter & Validator</h2>
+          <p className="text-zinc-400">Prettify, minify, and validate JSON data.</p>
         </div>
         
-        <div className="flex items-center gap-2 bg-zinc-900 p-1 rounded-lg border border-white/5">
-          <button 
-            onClick={() => setMode('encode')}
-            className={`px-4 py-1.5 rounded-md text-sm font-medium transition-all ${mode === 'encode' ? 'bg-accent text-white shadow-lg' : 'text-zinc-400 hover:text-white'}`}
-          >
-            Encode
-          </button>
-          <button 
-            onClick={() => setMode('decode')}
-            className={`px-4 py-1.5 rounded-md text-sm font-medium transition-all ${mode === 'decode' ? 'bg-accent text-white shadow-lg' : 'text-zinc-400 hover:text-white'}`}
-          >
-            Decode
-          </button>
+        <div className="flex items-center gap-4">
+          <div className="flex items-center gap-2 bg-zinc-900 p-1 rounded-lg border border-white/5">
+            {[2, 4].map(size => (
+              <button 
+                key={size}
+                onClick={() => { setIndent(size); setMinify(false); }}
+                className={`px-3 py-1 rounded-md text-xs font-medium transition-all ${indent === size && !minify ? 'bg-accent text-white shadow-lg' : 'text-zinc-400 hover:text-white'}`}
+              >
+                {size} Spaces
+              </button>
+            ))}
+            <button 
+              onClick={() => setMinify(true)}
+              className={`px-3 py-1 rounded-md text-xs font-medium transition-all ${minify ? 'bg-accent text-white shadow-lg' : 'text-zinc-400 hover:text-white'}`}
+            >
+              Minify
+            </button>
+          </div>
         </div>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 flex-1 min-h-[400px]">
-        {/* Input Area */}
         <div className="flex flex-col">
           <div className="flex items-center justify-between mb-2 px-1">
             <span className="text-xs font-semibold uppercase tracking-wider text-zinc-500">Input</span>
-            <button 
-              onClick={() => setInput('')}
-              className="p-1 hover:text-red-400 text-zinc-500 transition-colors"
-              title="Clear Input"
-            >
+            <button onClick={() => setInput('')} className="p-1 hover:text-red-400 text-zinc-500 transition-colors">
               <Trash2 size={16} />
             </button>
           </div>
@@ -102,18 +96,16 @@ export default function Base64Tool({ initialValue = '', initialAction = 'encode'
             value={input}
             onChange={(e) => setInput(e.target.value)}
             className="flex-1 bg-card border border-white/10 rounded-xl p-4 focus:outline-none focus:ring-2 focus:ring-accent/50 resize-none font-mono text-sm leading-relaxed"
-            placeholder={mode === 'encode' ? "Type or paste text to encode..." : "Paste Base64 string to decode..."}
+            placeholder="Paste your JSON here..."
           />
         </div>
 
-        {/* Output Area */}
         <div className="flex flex-col">
           <div className="flex items-center justify-between mb-2 px-1">
             <span className="text-xs font-semibold uppercase tracking-wider text-zinc-500">Output</span>
             <button 
-              onClick={copyToClipboard}
+              onClick={() => navigator.clipboard.writeText(output)}
               className="p-1 hover:text-accent text-zinc-500 transition-colors"
-              title="Copy to Clipboard"
               disabled={!output}
             >
               <Copy size={16} />
@@ -123,10 +115,10 @@ export default function Base64Tool({ initialValue = '', initialAction = 'encode'
             {error ? (
               <div className="flex items-start gap-2 text-red-400">
                 <AlertCircle size={18} className="shrink-0 mt-0.5" />
-                <span>{error}</span>
+                <span className="text-xs whitespace-pre-wrap">{error}</span>
               </div>
             ) : (
-              <pre className="whitespace-pre-wrap break-all text-zinc-300">{output || 'Waiting for input...'}</pre>
+              <pre className="whitespace-pre-wrap break-all text-zinc-300">{output || 'Waiting for valid JSON...'}</pre>
             )}
           </div>
         </div>
