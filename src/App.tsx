@@ -15,6 +15,7 @@ import { invoke } from '@tauri-apps/api/core';
 import { readText } from '@tauri-apps/plugin-clipboard-manager';
 import Base64Tool from './Base64Tool';
 import JsonTool from './JsonTool';
+import CommandPalette from './CommandPalette';
 
 interface DetectionResult {
   tool_id: string;
@@ -39,6 +40,7 @@ export default function App() {
   const [selectedTool, setSelectedTool] = useState<string | null>(null);
   const [activeCategory, setActiveCategory] = useState('all');
   const [suggestion, setSuggestion] = useState<ActiveSuggestion | null>(null);
+  const [isPaletteOpen, setIsPaletteOpen] = useState(false);
 
   const checkClipboard = async () => {
     try {
@@ -58,23 +60,40 @@ export default function App() {
 
   useEffect(() => {
     checkClipboard();
-    const handleEvents = () => checkClipboard();
-    window.addEventListener('focus', handleEvents);
-    window.addEventListener('mousedown', handleEvents);
+    const handleFocus = () => checkClipboard();
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+        e.preventDefault();
+        setIsPaletteOpen(true);
+      }
+    };
+
+    window.addEventListener('focus', handleFocus);
+    window.addEventListener('mousedown', handleFocus);
+    window.addEventListener('keydown', handleKeyDown);
+
     const interval = setInterval(() => {
       if (document.hasFocus()) checkClipboard();
     }, 3000);
 
     return () => {
-      window.removeEventListener('focus', handleEvents);
-      window.removeEventListener('mousedown', handleEvents);
+      window.removeEventListener('focus', handleFocus);
+      window.removeEventListener('mousedown', handleFocus);
+      window.removeEventListener('keydown', handleKeyDown);
       clearInterval(interval);
     };
   }, []);
 
   return (
-    <div className="flex h-screen bg-background text-foreground overflow-hidden">
-      {/* Sidebar (Existing) */}
+    <div className="flex h-screen bg-background text-foreground overflow-hidden font-sans">
+      <CommandPalette 
+        isOpen={isPaletteOpen} 
+        onClose={() => setIsPaletteOpen(false)} 
+        onSelect={setSelectedTool}
+        suggestionId={suggestion?.result.tool_id || null}
+      />
+
+      {/* Sidebar */}
       <aside className="w-64 border-r border-white/10 bg-card/50 flex flex-col shrink-0">
         <div className="p-6 flex items-center gap-3">
           <div className="w-8 h-8 bg-accent rounded-lg flex items-center justify-center shadow-lg shadow-accent/20">
@@ -119,9 +138,18 @@ export default function App() {
               <span>Back to Gallery</span>
             </button>
           ) : (
-            <div className="relative flex-1 max-w-xl">
+            <div 
+              onClick={() => setIsPaletteOpen(true)}
+              className="relative flex-1 max-w-xl cursor-pointer"
+            >
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-500" size={18} />
-              <input type="text" placeholder="Search tools... (Cmd + K)" className="w-full bg-white/5 border border-white/10 rounded-full py-2 pl-10 pr-4 focus:outline-none focus:ring-2 focus:ring-accent/50 transition-all placeholder:text-zinc-600" />
+              <div className="w-full bg-white/5 border border-white/10 rounded-full py-2 pl-10 pr-4 text-zinc-500 flex justify-between items-center hover:bg-white/10 transition-all">
+                <span>Search tools or type a command...</span>
+                <div className="flex items-center gap-1 px-2 py-0.5 rounded bg-white/5 border border-white/10 text-[10px] font-bold">
+                  <span className="text-zinc-500">⌘</span>
+                  <span className="text-zinc-500">K</span>
+                </div>
+              </div>
             </div>
           )}
         </header>
@@ -164,7 +192,6 @@ export default function App() {
               <h2 className="text-2xl font-bold mb-6">Explore Tools</h2>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 <ToolCard 
-                  id="base64" 
                   title="Base64 Encoder" 
                   desc="Securely encode or decode text locally." 
                   icon={<ShieldCheck size={28} />} 
@@ -172,7 +199,6 @@ export default function App() {
                   onClick={() => setSelectedTool('base64')} 
                 />
                 <ToolCard 
-                  id="json_formatter" 
                   title="JSON Formatter" 
                   desc="Prettify, minify, and validate JSON data." 
                   icon={<Code size={28} />} 
