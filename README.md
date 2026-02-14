@@ -3,7 +3,7 @@
 **The high-performance, native, and privacy-first developer powerhouse.**
 
 [![Release](https://img.shields.io/github/v/tag/ilhan-mstf/omnitool?label=version&color=3b82f6)](https://github.com/ilhan-mstf/omnitool/releases)
-[![License](https://img.shields.io/github/license/ilhan-mstf/omnitool?color=zinc)](LICENSE)
+[![License](https://img.shields.io/badge/license-Non--Commercial-orange)](LICENSE)
 [![Platform](https://img.shields.io/badge/platform-macOS%20%7C%20Windows%20%7C%20Linux-white)](https://github.com/ilhan-mstf/omnitool/releases)
 
 Stop pasting sensitive data into untrusted websites. **Omnitool** is a native desktop application built with **Rust (Tauri)** and **React** that brings all your essential developer utilities into a single, offline-first workflow engine.
@@ -96,4 +96,6 @@ Feedback and contributions are welcome! If you find a bug or have a tool suggest
 ---
 
 ## 📄 License
-MIT License - Copyright (c) 2026 Mustafa Ilhan.
+Source Available - Non-Commercial License.
+Commercial use or redistribution is strictly prohibited for anyone other than Mustafa Ilhan.
+See [LICENSE](LICENSE) for full details.
