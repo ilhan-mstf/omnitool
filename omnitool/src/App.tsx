@@ -123,15 +123,15 @@ export default function App() {
 
         <div className="p-4 border-t border-white/10 space-y-1">
           <button 
-            onClick={() => openUrl('mailto:feedback@omnitool.app')}
+            onClick={() => openUrl('https://github.com/ilhan-mstf/omnitool/issues')}
             className="w-full flex items-center gap-3 px-3 py-2 text-zinc-400 hover:text-white transition-colors"
           >
             <History size={18} />
             <span className="font-medium">Send Feedback</span>
           </button>
           <div className="pt-4 px-3 flex justify-between items-center">
-             <p className="text-[10px] font-bold text-zinc-600 uppercase tracking-widest">Version 0.1.0 (Beta)</p>
-             <button onClick={() => openUrl('https://github.com/omnitool/releases')} className="text-[10px] text-accent hover:underline">Updates?</button>
+             <p className="text-[10px] font-bold text-zinc-600 uppercase tracking-widest">Version 0.1.1-beta</p>
+             <button onClick={() => openUrl('https://github.com/ilhan-mstf/omnitool/releases')} className="text-[10px] text-accent hover:underline">Updates?</button>
           </div>
         </div>
       </aside>
@@ -161,7 +161,7 @@ export default function App() {
 
           {newVersion && (
             <button 
-              onClick={() => openUrl('https://github.com/ilhan-mstf/omnitool/releases/latest')}
+              onClick={() => openUrl('https://github.com/ilhan-mstf/omnitool/releases')}
               className="ml-4 flex items-center gap-2 px-3 py-1.5 bg-accent/10 border border-accent/30 rounded-lg text-accent text-xs font-bold animate-pulse hover:bg-accent/20 transition-all"
             >
               <Zap size={14} className="fill-current" />
