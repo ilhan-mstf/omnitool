@@ -33,6 +33,14 @@ export const TOOL_REGISTRY: Record<string, ToolMetadata> = {
     category: 'Encoders',
     icon: Link,
     defaultOptions: { action: 'encode' }
+  },
+  jwt_debugger: {
+    id: 'jwt_debugger',
+    name: 'JWT Debugger',
+    description: 'Decode and inspect JWT segments',
+    category: 'Converters',
+    icon: ShieldCheck,
+    defaultOptions: {}
   }
 };
 

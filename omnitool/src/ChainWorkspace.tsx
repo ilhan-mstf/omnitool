@@ -32,6 +32,11 @@ const OPTION_RENDERERS: Record<string, any> = {
       ))}
     </div>
   ),
+  jwt_debugger: () => (
+    <div className="text-[10px] text-zinc-500 font-bold uppercase tracking-widest">
+      Inspect Mode
+    </div>
+  ),
   json_formatter: (options: any, setOptions: any) => (
     <div className="flex gap-4 items-center">
        <div className="flex gap-2 bg-zinc-900 p-1 rounded-lg border border-white/5">
