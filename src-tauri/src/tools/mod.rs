@@ -30,3 +30,4 @@ pub trait Tool {
 
 pub mod base64_tool;
 pub mod json_tool;
+pub mod url_tool;

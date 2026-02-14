@@ -1,8 +1,8 @@
 {
   "$schema": "https://schema.tauri.app/config/2",
-  "productName": "omnitool",
+  "productName": "Omnitool",
   "version": "0.1.0",
-  "identifier": "com.milhan.omnitool",
+  "identifier": "com.omnitool.app",
   "build": {
     "beforeDevCommand": "npm run dev",
     "devUrl": "http://localhost:1420",
@@ -12,9 +12,11 @@
   "app": {
     "windows": [
       {
-        "title": "omnitool",
-        "width": 800,
-        "height": 600
+        "title": "Omnitool",
+        "width": 1200,
+        "height": 800,
+        "resizable": true,
+        "fullscreen": false
       }
     ],
     "security": {

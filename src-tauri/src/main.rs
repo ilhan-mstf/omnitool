@@ -3,7 +3,7 @@
 
 mod tools;
 mod detector;
-use tools::{Tool, ToolInput, ToolOutput, base64_tool::Base64Tool, json_tool::JsonTool};
+use tools::{Tool, ToolInput, ToolOutput, base64_tool::Base64Tool, json_tool::JsonTool, url_tool::UrlTool};
 
 #[tauri::command]
 fn detect_clipboard(text: String) -> Option<detector::DetectionResult> {
@@ -18,6 +18,7 @@ fn execute_tool(id: String, input: ToolInput) -> ToolOutput {
     let tool: Box<dyn Tool> = match id.as_str() {
         "base64" => Box::new(Base64Tool),
         "json_formatter" => Box::new(JsonTool),
+        "url_encoder" => Box::new(UrlTool),
         _ => return ToolOutput {
             result: "".to_string(),
             error: Some(format!("Tool '{}' not found", id)),

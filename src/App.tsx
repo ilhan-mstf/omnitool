@@ -1,21 +1,16 @@
 import { useState, useEffect } from 'react';
 import { 
   Search, 
-  Settings, 
-  Hash, 
-  Code, 
-  Zap, 
-  ShieldCheck, 
   History,
-  LayoutGrid,
-  ChevronLeft,
-  Sparkles
+  Zap,
+  ChevronLeft
 } from 'lucide-react';
 import { invoke } from '@tauri-apps/api/core';
 import { readText } from '@tauri-apps/plugin-clipboard-manager';
-import Base64Tool from './Base64Tool';
-import JsonTool from './JsonTool';
+import { openUrl } from '@tauri-apps/plugin-opener';
 import CommandPalette from './CommandPalette';
+import ChainWorkspace from './ChainWorkspace';
+import { getAllTools } from './lib/toolRegistry';
 
 interface DetectionResult {
   tool_id: string;
@@ -27,14 +22,6 @@ interface ActiveSuggestion {
   result: DetectionResult;
   text: string;
 }
-
-const CATEGORIES = [
-  { id: 'all', name: 'All Tools', icon: LayoutGrid },
-  { id: 'encoders', name: 'Encoders', icon: ShieldCheck },
-  { id: 'formatters', name: 'Formatters', icon: Code },
-  { id: 'generators', name: 'Generators', icon: Zap },
-  { id: 'converters', name: 'Converters', icon: Hash },
-];
 
 export default function App() {
   const [selectedTool, setSelectedTool] = useState<string | null>(null);
@@ -60,7 +47,7 @@ export default function App() {
 
   useEffect(() => {
     checkClipboard();
-    const handleFocus = () => checkClipboard();
+    const handleEvents = () => checkClipboard();
     const handleKeyDown = (e: KeyboardEvent) => {
       if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
         e.preventDefault();
@@ -68,8 +55,8 @@ export default function App() {
       }
     };
 
-    window.addEventListener('focus', handleFocus);
-    window.addEventListener('mousedown', handleFocus);
+    window.addEventListener('focus', handleEvents);
+    window.addEventListener('mousedown', handleEvents);
     window.addEventListener('keydown', handleKeyDown);
 
     const interval = setInterval(() => {
@@ -77,12 +64,16 @@ export default function App() {
     }, 3000);
 
     return () => {
-      window.removeEventListener('focus', handleFocus);
-      window.removeEventListener('mousedown', handleFocus);
+      window.removeEventListener('focus', handleEvents);
+      window.removeEventListener('mousedown', handleEvents);
       window.removeEventListener('keydown', handleKeyDown);
       clearInterval(interval);
     };
   }, []);
+
+  const toolsToDisplay = activeCategory === 'all' 
+    ? getAllTools() 
+    : getAllTools().filter(t => t.category.toLowerCase() === activeCategory);
 
   return (
     <div className="flex h-screen bg-background text-foreground overflow-hidden font-sans">
@@ -103,29 +94,34 @@ export default function App() {
         </div>
 
         <nav className="flex-1 px-4 space-y-1">
-          {CATEGORIES.map((cat) => (
-            <button
-              key={cat.id}
-              onClick={() => { setActiveCategory(cat.id); setSelectedTool(null); }}
-              className={`w-full flex items-center gap-3 px-3 py-2 rounded-md transition-all duration-200 ${
-                activeCategory === cat.id && !selectedTool ? 'bg-accent/10 text-accent' : 'text-zinc-400 hover:bg-white/5 hover:text-white'
-              }`}
-            >
-              <cat.icon size={18} />
-              <span className="font-medium">{cat.name}</span>
-            </button>
-          ))}
+          {['all', 'encoders', 'formatters', 'generators', 'converters'].map((id) => {
+            const isSelected = activeCategory === id && !selectedTool;
+            return (
+              <button
+                key={id}
+                onClick={() => { setActiveCategory(id); setSelectedTool(null); }}
+                className={`w-full flex items-center gap-3 px-3 py-2 rounded-md transition-all duration-200 capitalize ${
+                  isSelected ? 'bg-accent/10 text-accent' : 'text-zinc-400 hover:bg-white/5 hover:text-white'
+                }`}
+              >
+                <span className="font-medium">{id}</span>
+              </button>
+            );
+          })}
         </nav>
 
         <div className="p-4 border-t border-white/10 space-y-1">
-          <button className="w-full flex items-center gap-3 px-3 py-2 text-zinc-400 hover:text-white transition-colors">
+          <button 
+            onClick={() => openUrl('mailto:feedback@omnitool.app')}
+            className="w-full flex items-center gap-3 px-3 py-2 text-zinc-400 hover:text-white transition-colors"
+          >
             <History size={18} />
-            <span className="font-medium">Recent Activity</span>
+            <span className="font-medium">Send Feedback</span>
           </button>
-          <button className="w-full flex items-center gap-3 px-3 py-2 text-zinc-400 hover:text-white transition-colors">
-            <Settings size={18} />
-            <span className="font-medium">Settings</span>
-          </button>
+          <div className="pt-4 px-3 flex justify-between items-center">
+             <p className="text-[10px] font-bold text-zinc-600 uppercase tracking-widest">Version 0.1.0 (Beta)</p>
+             <button onClick={() => openUrl('https://github.com/omnitool/releases')} className="text-[10px] text-accent hover:underline">Updates?</button>
+          </div>
         </div>
       </aside>
 
@@ -138,10 +134,7 @@ export default function App() {
               <span>Back to Gallery</span>
             </button>
           ) : (
-            <div 
-              onClick={() => setIsPaletteOpen(true)}
-              className="relative flex-1 max-w-xl cursor-pointer"
-            >
+            <div onClick={() => setIsPaletteOpen(true)} className="relative flex-1 max-w-xl cursor-pointer">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-500" size={18} />
               <div className="w-full bg-white/5 border border-white/10 rounded-full py-2 pl-10 pr-4 text-zinc-500 flex justify-between items-center hover:bg-white/10 transition-all">
                 <span>Search tools or type a command...</span>
@@ -155,56 +148,48 @@ export default function App() {
         </header>
 
         <div className="flex-1 overflow-y-auto p-8">
-          {selectedTool === 'base64' ? (
-            <Base64Tool 
-              initialValue={suggestion?.result.tool_id === 'base64' ? suggestion.text : ''} 
-              initialAction={suggestion?.result.tool_id === 'base64' ? suggestion.result.initial_options.action : 'encode'}
-            />
-          ) : selectedTool === 'json_formatter' ? (
-            <JsonTool 
-              initialValue={suggestion?.result.tool_id === 'json_formatter' ? suggestion.text : ''} 
-              initialIndent={suggestion?.result.tool_id === 'json_formatter' ? suggestion.result.initial_options.indent : 2}
+          {selectedTool ? (
+            <ChainWorkspace 
+              initialToolId={selectedTool}
+              initialValue={suggestion?.result.tool_id === selectedTool ? suggestion.text : ''}
+              initialOptions={suggestion?.result.tool_id === selectedTool ? suggestion.result.initial_options : {}}
             />
           ) : (
             <div className="max-w-6xl mx-auto">
               {suggestion && (
                 <div 
                   onClick={() => setSelectedTool(suggestion.result.tool_id)}
-                  className="mb-8 p-4 bg-accent/10 border border-accent/30 rounded-xl flex items-center justify-between group cursor-pointer hover:bg-accent/20 transition-all animate-in slide-in-from-top-4 duration-500"
+                  className="mb-8 p-6 bg-accent/10 border border-accent/30 rounded-2xl flex items-center justify-between group cursor-pointer hover:bg-accent/20 transition-all shadow-lg shadow-accent/5"
                 >
                   <div className="flex items-center gap-4">
-                    <div className="w-10 h-10 rounded-full bg-accent flex items-center justify-center text-white">
-                      <Sparkles size={20} />
+                    <div className="w-12 h-12 rounded-full bg-accent flex items-center justify-center text-white shadow-lg shadow-accent/20">
+                      <Zap size={24} className="fill-current" />
                     </div>
                     <div>
-                      <p className="font-bold text-accent">Smart Suggestion</p>
-                      <p className="text-zinc-400 text-sm">
-                        Detected {suggestion.result.tool_id === 'base64' ? 'Base64 string' : 'JSON data'}. Click to {suggestion.result.tool_id === 'base64' ? 'decode' : 'format'} automatically.
+                      <p className="font-bold text-accent text-lg leading-tight">Smart Detection</p>
+                      <p className="text-zinc-400">
+                        {suggestion.result.tool_id === 'base64' ? 'Base64 string' : 'JSON data'} found. Start a workflow now.
                       </p>
                     </div>
                   </div>
-                  <button className="px-4 py-2 bg-accent text-white rounded-lg font-bold text-sm opacity-0 group-hover:opacity-100 transition-opacity">
-                    Magic Open
+                  <button className="px-6 py-2 bg-accent text-white rounded-xl font-bold transition-all group-hover:scale-105 active:scale-95">
+                    Magic Start
                   </button>
                 </div>
               )}
 
-              <h2 className="text-2xl font-bold mb-6">Explore Tools</h2>
+              <h2 className="text-2xl font-bold mb-8">All Utilities</h2>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                <ToolCard 
-                  title="Base64 Encoder" 
-                  desc="Securely encode or decode text locally." 
-                  icon={<ShieldCheck size={28} />} 
-                  isSuggested={suggestion?.result.tool_id === 'base64'}
-                  onClick={() => setSelectedTool('base64')} 
-                />
-                <ToolCard 
-                  title="JSON Formatter" 
-                  desc="Prettify, minify, and validate JSON data." 
-                  icon={<Code size={28} />} 
-                  isSuggested={suggestion?.result.tool_id === 'json_formatter'}
-                  onClick={() => setSelectedTool('json_formatter')} 
-                />
+                {toolsToDisplay.map(tool => (
+                  <ToolCard 
+                    key={tool.id}
+                    title={tool.name}
+                    desc={tool.description}
+                    icon={<tool.icon size={28} />}
+                    isSuggested={suggestion?.result.tool_id === tool.id}
+                    onClick={() => setSelectedTool(tool.id)}
+                  />
+                ))}
               </div>
             </div>
           )}
@@ -223,14 +208,14 @@ function ToolCard({ title, desc, icon, onClick, isSuggested }: any) {
       }`}
     >
       <div className={`w-12 h-12 rounded-xl flex items-center justify-center mb-6 transition-transform duration-300 group-hover:scale-110 ${
-        isSuggested ? 'bg-accent text-white' : 'bg-zinc-800 text-zinc-400 group-hover:bg-accent/10 group-hover:text-accent'
+        isSuggested ? 'bg-accent text-white shadow-lg shadow-accent/20' : 'bg-zinc-800 text-zinc-400 group-hover:bg-accent/10 group-hover:text-accent'
       }`}>
         {icon}
       </div>
       <h3 className="font-bold text-xl mb-2">{title}</h3>
       <p className="text-zinc-400 text-sm leading-relaxed">{desc}</p>
       {isSuggested && (
-        <div className="absolute top-4 right-4 flex items-center gap-1 text-[10px] font-black uppercase tracking-widest bg-accent text-white px-2 py-1 rounded">
+        <div className="absolute top-4 right-4 text-[10px] font-black uppercase tracking-widest bg-accent text-white px-2 py-1 rounded">
           Suggested
         </div>
       )}
