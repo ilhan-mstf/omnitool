@@ -53,6 +53,15 @@ Navigate the entire app without leaving your keyboard. Hit `⌘+K` (or `Ctrl+K`)
 
 ---
 
+### Installation via Homebrew (macOS)
+The recommended way for developers to install Omnitool:
+```bash
+brew install --cask --no-quarantine ilhan-mstf/tap/omnitool
+```
+*The `--no-quarantine` flag is required for unsigned Beta builds to avoid the "damaged app" security warning.*
+
+---
+
 ## 🏗️ Development
 
 Omnitool is built with the **Tauri v2** stack.
