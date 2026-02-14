@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Omnitool - The Ultimate Developer Toolbox</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        background: '#09090b',
+                        card: '#18181b',
+                        accent: '#3b82f6',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { background-color: #09090b; color: #fafafa; font-family: system-ui, sans-serif; }
+    </style>
+</head>
+<body class="antialiased min-h-screen flex flex-col">
+    <!-- Navbar -->
+    <nav class="border-b border-white/10 backdrop-blur-md sticky top-0 z-50 bg-background/80">
+        <div class="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
+            <div class="flex items-center gap-2">
+                <div class="w-8 h-8 bg-accent rounded-lg flex items-center justify-center font-bold text-white">O</div>
+                <span class="font-bold text-xl tracking-tight">Omnitool</span>
+            </div>
+            <div class="flex gap-6 text-sm font-medium text-zinc-400">
+                <a href="#features" class="hover:text-white transition-colors">Features</a>
+                <a href="https://github.com/omnitool/releases" class="hover:text-white transition-colors">Releases</a>
+                <a href="mailto:feedback@omnitool.app" class="hover:text-white transition-colors">Feedback</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero -->
+    <header class="py-24 text-center px-6 relative overflow-hidden">
+        <div class="absolute inset-0 bg-accent/5 radial-gradient"></div>
+        <div class="relative z-10 max-w-4xl mx-auto">
+            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-accent/10 text-accent text-xs font-bold uppercase tracking-widest mb-6 border border-accent/20">
+                🚀 Public Beta v0.1.0
+            </div>
+            <h1 class="text-5xl md:text-7xl font-extrabold tracking-tight mb-6 bg-gradient-to-r from-white to-zinc-500 bg-clip-text text-transparent">
+                Stop pasting code<br>into sketchy websites.
+            </h1>
+            <p class="text-xl text-zinc-400 mb-10 max-w-2xl mx-auto leading-relaxed">
+                Omnitool is the native, offline-first developer hub. Format JSON, decode Base64, and chain workflows—all without leaving your keyboard.
+            </p>
+            
+            <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
+                <a href="#" class="px-8 py-4 bg-white text-black font-bold rounded-full hover:scale-105 transition-transform flex items-center gap-2">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+                    Download for macOS
+                </a>
+                <a href="#" class="px-8 py-4 bg-zinc-800 border border-white/10 text-white font-bold rounded-full hover:bg-zinc-700 transition-colors flex items-center gap-2">
+                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M0 0h24v24H0z" fill="none"/><path d="M12 2C6.477 2 2 6.477 2 12c0 4.42 2.865 8.17 6.839 9.49.5.092.682-.217.682-.482 0-.237-.008-.866-.013-1.7-2.782.603-3.369-1.337-3.369-1.337-.454-1.151-1.11-1.462-1.11-1.462-.908-.62.069-.608.069-.608 1.003.07 1.531 1.03 1.531 1.03.892 1.529 2.341 1.087 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.11-4.555-4.943 0-1.091.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.687-4.566 4.935.359.309.678.919.678 1.852 0 1.336-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12c0-5.523-4.477-10-10-10z"/></svg>
+                    View on GitHub
+                </a>
+            </div>
+            <p class="mt-4 text-xs text-zinc-500">Also available for Windows & Linux (Coming Soon)</p>
+        </div>
+    </header>
+
+    <!-- Features Grid -->
+    <section id="features" class="py-24 bg-card/50 border-y border-white/5">
+        <div class="max-w-6xl mx-auto px-6 grid grid-cols-1 md:grid-cols-3 gap-8">
+            <!-- Feature 1 -->
+            <div class="p-8 rounded-2xl bg-zinc-900 border border-white/10 hover:border-accent/50 transition-colors">
+                <div class="w-12 h-12 bg-accent/10 rounded-xl flex items-center justify-center text-accent mb-6">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+                </div>
+                <h3 class="text-xl font-bold mb-3">Omni-Chains</h3>
+                <p class="text-zinc-400 leading-relaxed">
+                    Pipe tools together. Base64 Decode → JSON Format → Extract Key. Build complex workflows in seconds without scripts.
+                </p>
+            </div>
+
+            <!-- Feature 2 -->
+            <div class="p-8 rounded-2xl bg-zinc-900 border border-white/10 hover:border-accent/50 transition-colors">
+                <div class="w-12 h-12 bg-accent/10 rounded-xl flex items-center justify-center text-accent mb-6">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path></svg>
+                </div>
+                <h3 class="text-xl font-bold mb-3">Smart Detection</h3>
+                <p class="text-zinc-400 leading-relaxed">
+                    Omnitool watches your clipboard (privately). Copy a JWT? We'll suggest the debugger instantly. No more hunting for tools.
+                </p>
+            </div>
+
+            <!-- Feature 3 -->
+            <div class="p-8 rounded-2xl bg-zinc-900 border border-white/10 hover:border-accent/50 transition-colors">
+                <div class="w-12 h-12 bg-accent/10 rounded-xl flex items-center justify-center text-accent mb-6">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
+                </div>
+                <h3 class="text-xl font-bold mb-3">Offline & Secure</h3>
+                <p class="text-zinc-400 leading-relaxed">
+                    Zero telemetry. Zero cloud processing. Your sensitive tokens and logs never leave your device.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="mt-auto py-12 border-t border-white/5 text-center text-zinc-500 text-sm">
+        <p>&copy; 2026 Omnitool. Open Source & Native.</p>
+        <div class="mt-4 flex justify-center gap-4">
+            <a href="#" class="hover:text-white">GitHub</a>
+            <a href="#" class="hover:text-white">Privacy Policy</a>
+            <a href="#" class="hover:text-white">Contact</a>
+        </div>
+    </footer>
+</body>
+</html>

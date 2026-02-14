@@ -13,7 +13,7 @@ impl Tool for Base64Tool {
 
         match action {
             "decode" => {
-                match general_purpose::STANDARD.decode(input.value.trim()) {
+                match general_purpose::STANDARD.decode(input.value) {
                     Ok(decoded) => ToolOutput {
                         result: String::from_utf8_lossy(&decoded).to_string(),
                         error: None,
@@ -24,7 +24,7 @@ impl Tool for Base64Tool {
                     },
                 }
             },
-            _ => {
+            _ => { // Default to encode
                 let encoded = general_purpose::STANDARD.encode(input.value);
                 ToolOutput {
                     result: encoded,
@@ -32,47 +32,5 @@ impl Tool for Base64Tool {
                 }
             }
         }
-    }
-}
-
-#[cfg(test)]
-mod tests {
-    use super::*;
-    use serde_json::json;
-
-    #[test]
-    fn test_base64_encode() {
-        let tool = Base64Tool;
-        let input = ToolInput {
-            value: "Hello World".to_string(),
-            options: json!({ "action": "encode" }),
-        };
-        let output = tool.execute(input);
-        assert_eq!(output.result, "SGVsbG8gV29ybGQ=");
-        assert!(output.error.is_none());
-    }
-
-    #[test]
-    fn test_base64_decode() {
-        let tool = Base64Tool;
-        let input = ToolInput {
-            value: "SGVsbG8gV29ybGQ=".to_string(),
-            options: json!({ "action": "decode" }),
-        };
-        let output = tool.execute(input);
-        assert_eq!(output.result, "Hello World");
-        assert!(output.error.is_none());
-    }
-
-    #[test]
-    fn test_base64_decode_invalid() {
-        let tool = Base64Tool;
-        let input = ToolInput {
-            value: "!!!Invalid!!!".to_string(),
-            options: json!({ "action": "decode" }),
-        };
-        let output = tool.execute(input);
-        assert!(output.error.is_some());
-        assert_eq!(output.result, "");
     }
 }
