@@ -47,7 +47,7 @@ Navigate the entire app without leaving your keyboard. Hit `⌘+K` (or `Ctrl+K`)
 
 1.  **Download** the binary for your OS from the [Releases](https://github.com/ilhan-mstf/omnitool/releases) page.
 2.  **Install** and launch.
-3.  **macOS Note:** If you see a "damaged" error, run `sudo xattr -rd com.apple.quarantine /Applications/Omnitool.app` in your terminal to allow the app to run (required for unsigned Beta builds).
+3.  **macOS Note:** As this is a Beta build, you may see a security warning. To open: **Right-click** the app icon, select **Open**, and click **Open** again in the dialog. (Alternatively, go to System Settings > Privacy & Security and click "Open Anyway").
 4.  **Use ⌘+K** to find your first tool.
 4.  **Copy** some JSON and watch the **Smart Suggestion** appear!
 
