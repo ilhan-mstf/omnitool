@@ -1,9 +1,56 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Omnitool - The Privacy-First Developer Toolbox</title>
+    
+    <!-- Primary Meta Tags -->
+    <title>Omnitool | The Privacy-First, Offline Developer Toolbox</title>
+    <meta name="title" content="Omnitool | The Privacy-First, Offline Developer Toolbox">
+    <meta name="description" content="A native, offline-first developer powerhouse. Format JSON, decode Base64, and chain workflows locally with Omni-Chains. Zero telemetry, 100% private.">
+    <meta name="keywords" content="developer tools, json formatter, base64 decoder, jwt debugger, offline devtools, privacy first, tauri app, rust developer tools">
+    <meta name="author" content="Mustafa Ilhan">
+    <link rel="canonical" href="https://ilhan-mstf.github.io/omnitool/">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://ilhan-mstf.github.io/omnitool/">
+    <meta property="og:title" content="Omnitool | The Privacy-First Developer Toolbox">
+    <meta property="og:description" content="Stop pasting sensitive data into untrusted websites. Use Omnitool for native, offline-first data transformations.">
+    <meta property="og:image" content="https://ilhan-mstf.github.io/omnitool/og-image.png">
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://ilhan-mstf.github.io/omnitool/">
+    <meta property="twitter:title" content="Omnitool | The Privacy-First Developer Toolbox">
+    <meta property="twitter:description" content="Native, offline-first developer powerhouse. Format JSON, decode Base64, and chain workflows locally.">
+    <meta property="twitter:image" content="https://ilhan-mstf.github.io/omnitool/og-image.png">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
+
+    <!-- JSON-LD Structured Data -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "SoftwareApplication",
+      "name": "Omnitool",
+      "operatingSystem": "Windows, macOS, Linux",
+      "applicationCategory": "DeveloperApplication",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
+      },
+      "description": "A native, offline-first developer powerhouse for JSON formatting, Base64 encoding, and workflow chaining.",
+      "softwareVersion": "0.1.1-beta",
+      "author": {
+        "@type": "Person",
+        "name": "Mustafa Ilhan"
+      }
+    }
+    </script>
+
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
@@ -19,205 +66,213 @@
         }
     </script>
     <style>
-        body { background-color: #09090b; color: #fafafa; font-family: system-ui, sans-serif; }
+        body { background-color: #09090b; color: #fafafa; font-family: system-ui, -apple-system, sans-serif; }
         .radial-gradient { background: radial-gradient(circle at center, rgba(59, 130, 246, 0.08) 0%, transparent 70%); }
+        :focus-visible { outline: 2px solid #3b82f6; outline-offset: 4px; }
     </style>
 </head>
 <body class="antialiased min-h-screen flex flex-col">
+    <!-- Skip to Content for a11y -->
+    <a href="#main-content" class="sr-only focus:not-sr-only absolute top-4 left-4 z-[100] bg-accent text-white px-4 py-2 rounded-lg font-bold">Skip to content</a>
+
     <!-- Navbar -->
-    <nav class="border-b border-white/10 backdrop-blur-md sticky top-0 z-50 bg-background/80">
+    <nav class="border-b border-white/10 backdrop-blur-md sticky top-0 z-50 bg-background/80" role="navigation" aria-label="Main Navigation">
         <div class="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
             <div class="flex items-center gap-2">
-                <div class="w-8 h-8 bg-accent rounded-lg flex items-center justify-center font-bold text-white">O</div>
+                <div class="w-8 h-8 bg-accent rounded-lg flex items-center justify-center font-bold text-white" aria-hidden="true">O</div>
                 <span class="font-bold text-xl tracking-tight">Omnitool</span>
             </div>
             <div class="flex gap-6 text-sm font-medium text-zinc-400">
-                <a href="#features" class="hover:text-white transition-colors">Features</a>
-                <a href="https://github.com/ilhan-mstf/omnitool/releases" class="hover:text-white transition-colors">Releases</a>
-                <a href="https://github.com/ilhan-mstf/omnitool/issues" class="hover:text-white transition-colors">Report Issue</a>
+                <a href="#features" class="hover:text-white transition-colors focus:text-white">Features</a>
+                <a href="#install" class="hover:text-white transition-colors focus:text-white">Install</a>
+                <a href="https://github.com/ilhan-mstf/omnitool/releases" class="hover:text-white transition-colors focus:text-white" target="_blank" rel="noopener noreferrer">Releases</a>
+                <a href="https://github.com/ilhan-mstf/omnitool/issues" class="hover:text-white transition-colors focus:text-white" target="_blank" rel="noopener noreferrer">Support</a>
             </div>
         </div>
     </nav>
 
-    <!-- Hero -->
-    <header class="py-24 text-center px-6 relative overflow-hidden">
-        <div class="absolute inset-0 radial-gradient"></div>
-        <div class="relative z-10 max-w-4xl mx-auto">
-            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-accent/10 text-accent text-xs font-bold uppercase tracking-widest mb-6 border border-accent/20">
-                🛡️ 100% Offline & Private
-            </div>
-            <h1 class="text-5xl md:text-7xl font-extrabold tracking-tight mb-6 bg-gradient-to-r from-white to-zinc-500 bg-clip-text text-transparent">
-                Your data is yours.<br>Keep it off the cloud.
-            </h1>
-            <p class="text-xl text-zinc-400 mb-10 max-w-2xl mx-auto leading-relaxed">
-                Omnitool is the native, offline-first powerhouse for developers. Format JSON, decode Base64, and chain workflows locally. No tracking, no sketchy websites.
-            </p>
-            
-            <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
-                <a href="https://github.com/ilhan-mstf/omnitool/releases" class="px-8 py-4 bg-white text-black font-bold rounded-full hover:scale-105 transition-transform flex items-center gap-2">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
-                    Download Latest
-                </a>
-                <a href="https://github.com/ilhan-mstf/omnitool" class="px-8 py-4 bg-zinc-800 border border-white/10 text-white font-bold rounded-full hover:bg-zinc-700 transition-colors flex items-center gap-2">
-                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.477 2 2 6.477 2 12c0 4.42 2.865 8.17 6.839 9.49.5.092.682-.217.682-.482 0-.237-.008-.866-.013-1.7-2.782.603-3.369-1.337-3.369-1.337-.454-1.151-1.11-1.462-1.11-1.462-.908-.62.069-.608.069-.608 1.003.07 1.531 1.03 1.531 1.03.892 1.529 2.341 1.087 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.11-4.555-4.943 0-1.091.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.687-4.566 4.935.359.309.678.919.678 1.852 0 1.336-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12c0-5.523-4.477-10-10-10z"/></svg>
-                    Star on GitHub
-                </a>
-            </div>
-            <p class="mt-4 text-xs text-zinc-500">Available for macOS, Windows, and Linux.</p>
-            <p class="mt-2 text-[10px] text-zinc-600 max-w-sm mx-auto italic">
-                Note for macOS: As this is a Beta, you may need to <strong>Right-click > Open</strong> the app icon to bypass the security warning.
-            </p>
-        </div>
-    </header>
-
-    <!-- Features Grid -->
-    <section id="features" class="py-24 bg-card/50 border-y border-white/5">
-        <div class="max-w-6xl mx-auto px-6 grid grid-cols-1 md:grid-cols-3 gap-8">
-            <!-- Feature 1: PRIVACY FIRST -->
-            <div class="p-8 rounded-2xl bg-zinc-900 border border-accent/20 hover:border-accent/50 transition-colors shadow-2xl shadow-accent/5">
-                <div class="w-12 h-12 bg-accent/10 rounded-xl flex items-center justify-center text-accent mb-6">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
+    <main id="main-content">
+        <!-- Hero -->
+        <header class="py-24 text-center px-6 relative overflow-hidden">
+            <div class="absolute inset-0 radial-gradient" aria-hidden="true"></div>
+            <div class="relative z-10 max-w-4xl mx-auto">
+                <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-accent/10 text-accent text-xs font-bold uppercase tracking-widest mb-6 border border-accent/20">
+                    🛡️ 100% Offline & Private
                 </div>
-                <h3 class="text-xl font-bold mb-3">Privacy First</h3>
-                <p class="text-zinc-400 leading-relaxed">
-                    Zero telemetry. Zero cloud processing. All transformations happen locally on your hardware. Your tokens and logs never leave your device.
+                <h1 class="text-5xl md:text-7xl font-extrabold tracking-tight mb-6 bg-gradient-to-r from-white to-zinc-500 bg-clip-text text-transparent">
+                    Your data is yours.<br>Keep it off the cloud.
+                </h1>
+                <p class="text-xl text-zinc-400 mb-10 max-w-2xl mx-auto leading-relaxed">
+                    Omnitool is the native, offline-first powerhouse for developers. Format JSON, decode Base64, and chain workflows locally. No tracking, no leaky websites.
+                </p>
+                
+                <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
+                    <a href="https://github.com/ilhan-mstf/omnitool/releases" class="px-8 py-4 bg-white text-black font-bold rounded-full hover:scale-105 transition-transform flex items-center gap-2" aria-label="Download the latest version of Omnitool from GitHub">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+                        Download Latest
+                    </a>
+                    <a href="https://github.com/ilhan-mstf/omnitool" class="px-8 py-4 bg-zinc-800 border border-white/10 text-white font-bold rounded-full hover:bg-zinc-700 transition-colors flex items-center gap-2" target="_blank" rel="noopener noreferrer" aria-label="Star the Omnitool repository on GitHub">
+                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2C6.477 2 2 6.477 2 12c0 4.42 2.865 8.17 6.839 9.49.5.092.682-.217.682-.482 0-.237-.008-.866-.013-1.7-2.782.603-3.369-1.337-3.369-1.337-.454-1.151-1.11-1.462-1.11-1.462-.908-.62.069-.608.069-.608 1.003.07 1.531 1.03 1.531 1.03.892 1.529 2.341 1.087 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.11-4.555-4.943 0-1.091.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.687-4.566 4.935.359.309.678.919.678 1.852 0 1.336-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12c0-5.523-4.477-10-10-10z"/></svg>
+                        Star on GitHub
+                    </a>
+                </div>
+                <p class="mt-4 text-xs text-zinc-500">Native binaries for macOS, Windows, and Linux.</p>
+                <p class="mt-2 text-[10px] text-zinc-600 max-w-sm mx-auto italic">
+                    Note for macOS: As this is a Beta, you may need to <strong>Right-click > Open</strong> the app icon to bypass the security warning.
                 </p>
             </div>
+        </header>
 
-            <!-- Feature 2: OMNI-CHAINS -->
-            <div class="p-8 rounded-2xl bg-zinc-900 border border-white/10 hover:border-accent/50 transition-colors">
-                <div class="w-12 h-12 bg-accent/10 rounded-xl flex items-center justify-center text-accent mb-6">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
-                </div>
-                <h3 class="text-xl font-bold mb-3">Omni-Chains</h3>
-                <p class="text-zinc-400 leading-relaxed">
-                    Pipe tools together seamlessly. Base64 Decode → JSON Format → Extract Key. Build complex workflows without manual copy-pasting.
-                </p>
-            </div>
-
-            <!-- Feature 3: SMART DETECTION -->
-            <div class="p-8 rounded-2xl bg-zinc-900 border border-white/10 hover:border-accent/50 transition-colors">
-                <div class="w-12 h-12 bg-accent/10 rounded-xl flex items-center justify-center text-accent mb-6">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path></svg>
-                </div>
-                <h3 class="text-xl font-bold mb-3">Smart Detection</h3>
-                <p class="text-zinc-400 leading-relaxed">
-                    Intelligent clipboard monitoring. Copy a JWT or JSON, and Omnitool will instantly suggest the right tool for the job.
-                </p>
-            </div>
-        </div>
-    </section>
-
-    <!-- Lead Gen: Email List -->
-    <section class="py-24 px-6 border-b border-white/5">
-        <div class="max-w-xl mx-auto text-center">
-            <h2 class="text-3xl font-bold mb-4">Stay updated</h2>
-            <p class="text-zinc-400 mb-8">We're adding new tools every week. Leave your email to get notified about new releases and the upcoming Local AI features.</p>
-            <form action="https://formspree.io/f/PLACEHOLDER" method="POST" class="flex flex-col sm:flex-row gap-3">
-                <input 
-                    type="email" 
-                    name="email" 
-                    placeholder="Enter your email" 
-                    required 
-                    class="flex-1 bg-zinc-900 border border-white/10 rounded-xl px-6 py-4 focus:ring-2 focus:ring-accent/50 outline-none"
-                >
-                <button type="submit" class="px-8 py-4 bg-accent text-white font-bold rounded-xl hover:scale-105 transition-transform">
-                    Keep me posted
-                </button>
-            </form>
-            <p class="mt-4 text-[10px] text-zinc-600 uppercase tracking-widest font-bold">Zero Spam. Just product updates.</p>
-        </div>
-    </section>
-
-    </section>
-
-    <!-- Installation Guide -->
-    <section id="install" class="py-24 px-6 bg-card/30 border-b border-white/5">
-        <div class="max-w-4xl mx-auto">
-            <h2 class="text-3xl font-bold mb-12 text-center">How to Install</h2>
-            
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                <!-- macOS Section -->
-                <div id="mac-install" class="p-8 rounded-3xl bg-zinc-900 border border-white/10 relative overflow-hidden transition-all duration-500">
-                    <div class="flex items-center gap-3 mb-6">
-                        <svg class="w-6 h-6 text-zinc-400" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.477 2 2 6.477 2 12c0 4.42 2.865 8.17 6.839 9.49.5.092.682-.217.682-.482 0-.237-.008-.866-.013-1.7-2.782.603-3.369-1.337-3.369-1.337-.454-1.151-1.11-1.462-1.11-1.462-.908-.62.069-.608.069-.608 1.003.07 1.531 1.03 1.531 1.03.892 1.529 2.341 1.087 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.11-4.555-4.943 0-1.091.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.687-4.566 4.935.359.309.678.919.678 1.852 0 1.336-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12c0-5.523-4.477-10-10-10z"/></svg>
-                        <h3 class="text-xl font-bold">macOS</h3>
+        <!-- Features Grid -->
+        <section id="features" class="py-24 bg-card/50 border-y border-white/5" aria-labelledby="features-title">
+            <h2 id="features-title" class="sr-only">Features</h2>
+            <div class="max-w-6xl mx-auto px-6 grid grid-cols-1 md:grid-cols-3 gap-8">
+                <!-- Feature 1: PRIVACY FIRST -->
+                <div class="p-8 rounded-2xl bg-zinc-900 border border-accent/20 hover:border-accent/50 transition-colors shadow-2xl shadow-accent/5 group">
+                    <div class="w-12 h-12 bg-accent/10 rounded-xl flex items-center justify-center text-accent mb-6 group-hover:scale-110 transition-transform">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><title>Privacy Icon</title><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
                     </div>
-                    
-                    <div class="space-y-6">
-                        <div>
-                            <p class="text-xs font-black text-accent uppercase tracking-widest mb-2">Method 1: Homebrew (Pro)</p>
-                            <div class="relative group/code">
-                                <code class="block p-3 bg-black rounded-lg border border-white/5 text-sm text-zinc-300 overflow-x-auto">
-                                    brew install --cask ilhan-mstf/tap/omnitool
-                                </code>
-                                <button onclick="copyToClipboard(this, 'brew install --cask ilhan-mstf/tap/omnitool')" class="absolute top-2 right-2 p-1.5 bg-zinc-800 text-zinc-400 rounded-md opacity-0 group-hover/code:opacity-100 transition-all hover:bg-zinc-700 hover:text-white">
-                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3"></path></svg>
-                                </button>
-                            </div>
-                        </div>
-
-                        <div>
-                            <p class="text-xs font-black text-zinc-500 uppercase tracking-widest mb-2">Method 2: Manual Bypass</p>
-                            <p class="text-sm text-zinc-400 leading-relaxed">
-                                Download the .dmg, move to Applications, then <strong>Right-Click > Open</strong> to bypass the unsigned developer warning.
-                            </p>
-                        </div>
-
-                        <div>
-                            <p class="text-xs font-black text-zinc-500 uppercase tracking-widest mb-2">Method 3: Terminal</p>
-                            <p class="text-sm text-zinc-400 mb-2">If blocked, run this to un-quarantine:</p>
-                            <div class="relative group/code">
-                                <code class="block p-3 bg-black rounded-lg border border-white/5 text-[10px] text-zinc-500 overflow-x-auto">
-                                    sudo xattr -rd com.apple.quarantine /Applications/Omnitool.app
-                                </code>
-                                <button onclick="copyToClipboard(this, 'sudo xattr -rd com.apple.quarantine /Applications/Omnitool.app')" class="absolute top-2 right-2 p-1.5 bg-zinc-800 text-zinc-400 rounded-md opacity-0 group-hover/code:opacity-100 transition-all hover:bg-zinc-700 hover:text-white">
-                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3"></path></svg>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
+                    <h3 class="text-xl font-bold mb-3">Privacy First</h3>
+                    <p class="text-zinc-400 leading-relaxed">
+                        Zero telemetry. Zero cloud processing. All transformations happen locally on your hardware. Your data never leaves your device.
+                    </p>
                 </div>
 
-                <!-- Windows & Linux Section -->
-                <div class="p-8 rounded-3xl bg-zinc-900/50 border border-white/5">
-                    <h3 class="text-xl font-bold mb-6 text-zinc-300">Windows & Linux</h3>
-                    <div class="space-y-8">
-                        <div>
-                            <p class="text-sm font-bold mb-2 flex items-center gap-2">
-                                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M0 0v24h24v-24h-24zm10.997 11h-7.997v-7h7.997v7zm0 9h-7.997v-7h7.997v7zm9-9h-8v-7h8v7zm0 9h-8v-7h8v7z"/></svg>
-                                Windows (.msi)
-                            </p>
-                            <p class="text-sm text-zinc-400">Run the installer. If prompted by SmartScreen, click "More info" and then "Run anyway".</p>
-                        </div>
-                        <div>
-                            <p class="text-sm font-bold mb-2 flex items-center gap-2">
-                                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2c-.6 0-1.1.4-1.3 1l-2.5 7h7.6l-2.5-7c-.2-.6-.7-1-1.3-1zm-5.1 10l-4.1 5.1c-.3.4-.3 1 0 1.4l1.1 1.4c.3.4.9.4 1.2 0l4.3-5.4c.2-.3.2-.7 0-1l-1.3-1.5c-.2-.3-.7-.3-1.2 0zm10.2 0l-1.3 1.5c-.2.3-.2.7 0 1l4.3 5.4c.3.4.9.4 1.2 0l1.1-1.4c.3-.4.3-1 0-1.4l-4.1-5.1c-.5-.3-1-.3-1.2 0z"/></svg>
-                                Linux (.AppImage)
-                            </p>
-                            <p class="text-sm text-zinc-400 mb-2">Make the AppImage executable before running:</p>
-                            <div class="relative group/code">
-                                <code class="block p-3 bg-black rounded-lg border border-white/5 text-sm text-zinc-300 overflow-x-auto">
-                                    chmod +x Omnitool.AppImage
-                                </code>
-                                <button onclick="copyToClipboard(this, 'chmod +x Omnitool.AppImage')" class="absolute top-2 right-2 p-1.5 bg-zinc-800 text-zinc-400 rounded-md opacity-0 group-hover/code:opacity-100 transition-all hover:bg-zinc-700 hover:text-white">
-                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3"></path></svg>
-                                </button>
-                            </div>
-                        </div>
+                <!-- Feature 2: OMNI-CHAINS -->
+                <div class="p-8 rounded-2xl bg-zinc-900 border border-white/10 hover:border-accent/50 transition-colors group">
+                    <div class="w-12 h-12 bg-accent/10 rounded-xl flex items-center justify-center text-accent mb-6 group-hover:scale-110 transition-transform">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><title>Workflow Icon</title><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
                     </div>
+                    <h3 class="text-xl font-bold mb-3">Omni-Chains</h3>
+                    <p class="text-zinc-400 leading-relaxed">
+                        Pipe tools together. Base64 Decode → JSON Format → Extract Key. Build complex workflows without manual copy-pasting.
+                    </p>
+                </div>
+
+                <!-- Feature 3: SMART DETECTION -->
+                <div class="p-8 rounded-2xl bg-zinc-900 border border-white/10 hover:border-accent/50 transition-colors group">
+                    <div class="w-12 h-12 bg-accent/10 rounded-xl flex items-center justify-center text-accent mb-6 group-hover:scale-110 transition-transform">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><title>Detection Icon</title><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path></svg>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3">Smart Detection</h3>
+                    <p class="text-zinc-400 leading-relaxed">
+                        Intelligent clipboard monitoring. Copy a JWT or JSON, and Omnitool will instantly suggest the right tool for the job.
+                    </p>
                 </div>
             </div>
-        </div>
-    </section>
+        </section>
+
+        <!-- Lead Gen: Email List -->
+        <section class="py-24 px-6 border-b border-white/5" aria-labelledby="newsletter-title">
+            <div class="max-w-xl mx-auto text-center">
+                <h2 id="newsletter-title" class="text-3xl font-bold mb-4">Stay Updated</h2>
+                <p class="text-zinc-400 mb-8">We're adding new tools every week. Leave your email to get notified about new releases and upcoming Local AI features.</p>
+                <form action="https://formspree.io/f/PLACEHOLDER" method="POST" class="flex flex-col sm:flex-row gap-3">
+                    <label for="email-address" class="sr-only">Email address</label>
+                    <input 
+                        id="email-address"
+                        type="email" 
+                        name="email" 
+                        placeholder="Enter your email" 
+                        required 
+                        class="flex-1 bg-zinc-900 border border-white/10 rounded-xl px-6 py-4 focus:ring-2 focus:ring-accent/50 outline-none text-white"
+                    >
+                    <button type="submit" class="px-8 py-4 bg-accent text-white font-bold rounded-xl hover:scale-105 transition-transform active:scale-95 focus:ring-2 focus:ring-white">
+                        Keep me posted
+                    </button>
+                </form>
+                <p class="mt-4 text-[10px] text-zinc-600 uppercase tracking-widest font-bold">Zero Spam. Just product updates.</p>
+            </div>
+        </section>
+
+        <!-- Installation Guide -->
+        <section id="install" class="py-24 px-6 bg-card/30 border-b border-white/5" aria-labelledby="install-title">
+            <div class="max-w-4xl mx-auto">
+                <h2 id="install-title" class="text-3xl font-bold mb-12 text-center">How to Install</h2>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <!-- macOS Section -->
+                    <article id="mac-install" class="p-8 rounded-3xl bg-zinc-900 border border-white/10 relative overflow-hidden transition-all duration-500">
+                        <div class="flex items-center gap-3 mb-6">
+                            <svg class="w-6 h-6 text-zinc-400" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2C6.477 2 2 6.477 2 12c0 4.42 2.865 8.17 6.839 9.49.5.092.682-.217.682-.482 0-.237-.008-.866-.013-1.7-2.782.603-3.369-1.337-3.369-1.337-.454-1.151-1.11-1.462-1.11-1.462-.908-.62.069-.608.069-.608 1.003.07 1.531 1.03 1.531 1.03.892 1.529 2.341 1.087 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.11-4.555-4.943 0-1.091.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.687-4.566 4.935.359.309.678.919.678 1.852 0 1.336-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12c0-5.523-4.477-10-10-10z"/></svg>
+                            <h3 class="text-xl font-bold">macOS</h3>
+                        </div>
+                        
+                        <div class="space-y-6">
+                            <div>
+                                <p class="text-xs font-black text-accent uppercase tracking-widest mb-2">Method 1: Homebrew (Pro)</p>
+                                <div class="relative group/code">
+                                    <code class="block p-3 bg-black rounded-lg border border-white/5 text-sm text-zinc-300 overflow-x-auto">
+                                        brew install --cask ilhan-mstf/tap/omnitool
+                                    </code>
+                                    <button onclick="copyToClipboard(this, 'brew install --cask ilhan-mstf/tap/omnitool')" class="absolute top-2 right-2 p-1.5 bg-zinc-800 text-zinc-400 rounded-md opacity-0 group-hover/code:opacity-100 transition-all hover:bg-zinc-700 hover:text-white" aria-label="Copy homebrew command to clipboard">
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3"></path></svg>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div>
+                                <p class="text-xs font-black text-zinc-500 uppercase tracking-widest mb-2">Method 2: Manual Bypass</p>
+                                <p class="text-sm text-zinc-400 leading-relaxed">
+                                    Download the .dmg, move to Applications, then <strong>Right-Click > Open</strong> to bypass the developer warning.
+                                </p>
+                            </div>
+
+                            <div>
+                                <p class="text-xs font-black text-zinc-500 uppercase tracking-widest mb-2">Method 3: Terminal</p>
+                                <p class="text-sm text-zinc-400 mb-2">If blocked, run this to un-quarantine:</p>
+                                <div class="relative group/code">
+                                    <code class="block p-3 bg-black rounded-lg border border-white/5 text-[10px] text-zinc-500 overflow-x-auto">
+                                        sudo xattr -rd com.apple.quarantine /Applications/Omnitool.app
+                                    </code>
+                                    <button onclick="copyToClipboard(this, 'sudo xattr -rd com.apple.quarantine /Applications/Omnitool.app')" class="absolute top-2 right-2 p-1.5 bg-zinc-800 text-zinc-400 rounded-md opacity-0 group-hover/code:opacity-100 transition-all hover:bg-zinc-700 hover:text-white" aria-label="Copy un-quarantine command to clipboard">
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3"></path></svg>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </article>
+
+                    <!-- Windows & Linux Section -->
+                    <article class="p-8 rounded-3xl bg-zinc-900/50 border border-white/5">
+                        <h3 class="text-xl font-bold mb-6 text-zinc-300">Windows & Linux</h3>
+                        <div class="space-y-8">
+                            <div>
+                                <p class="text-sm font-bold mb-2 flex items-center gap-2">
+                                    <svg class="w-4 h-4 text-zinc-500" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M0 0v24h24v-24h-24zm10.997 11h-7.997v-7h7.997v7zm0 9h-7.997v-7h7.997v7zm9-9h-8v-7h8v7zm0 9h-8v-7h8v7z"/></svg>
+                                    Windows (.msi)
+                                </p>
+                                <p class="text-sm text-zinc-400">Run the installer. If prompted by SmartScreen, click "More info" and then "Run anyway".</p>
+                            </div>
+                            <div>
+                                <p class="text-sm font-bold mb-2 flex items-center gap-2">
+                                    <svg class="w-4 h-4 text-zinc-500" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2c-.6 0-1.1.4-1.3 1l-2.5 7h7.6l-2.5-7c-.2-.6-.7-1-1.3-1zm-5.1 10l-4.1 5.1c-.3.4-.3 1 0 1.4l1.1 1.4c.3.4.9.4 1.2 0l4.3-5.4c.2-.3.2-.7 0-1l-1.3-1.5c-.2-.3-.7-.3-1.2 0zm10.2 0l-1.3 1.5c-.2.3-.2.7 0 1l4.3 5.4c.3.4.9.4 1.2 0l1.1-1.4c.3-.4.3-1 0-1.4l-4.1-5.1c-.5-.3-1-.3-1.2 0z"/></svg>
+                                    Linux (.AppImage)
+                                </p>
+                                <p class="text-sm text-zinc-400 mb-2">Make the AppImage executable before running:</p>
+                                <div class="relative group/code">
+                                    <code class="block p-3 bg-black rounded-lg border border-white/5 text-sm text-zinc-300 overflow-x-auto">
+                                        chmod +x Omnitool.AppImage
+                                    </code>
+                                    <button onclick="copyToClipboard(this, 'chmod +x Omnitool.AppImage')" class="absolute top-2 right-2 p-1.5 bg-zinc-800 text-zinc-400 rounded-md opacity-0 group-hover/code:opacity-100 transition-all hover:bg-zinc-700 hover:text-white" aria-label="Copy linux command to clipboard">
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3"></path></svg>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </article>
+                </div>
+            </div>
+        </section>
+    </main>
 
     <!-- Footer -->
-    <footer class="mt-auto py-12 border-t border-white/5 text-center text-zinc-500 text-sm">
+    <footer class="mt-auto py-12 border-t border-white/5 text-center text-zinc-500 text-sm" role="contentinfo">
         <p>&copy; 2026 Omnitool. Native & Secure.</p>
         <div class="mt-4 flex justify-center gap-4 text-xs font-bold uppercase tracking-widest">
-            <a href="https://github.com/ilhan-mstf/omnitool" class="hover:text-white transition-colors">Source</a>
-            <a href="https://github.com/ilhan-mstf/omnitool/issues" class="hover:text-white transition-colors">Feedback</a>
-            <a href="https://ilhan-mstf.github.io/omnitool/LICENSE" class="hover:text-white transition-colors">License</a>
+            <a href="https://github.com/ilhan-mstf/omnitool" class="hover:text-white transition-colors focus:text-white">Source</a>
+            <a href="https://github.com/ilhan-mstf/omnitool/issues" class="hover:text-white transition-colors focus:text-white">Feedback</a>
+            <a href="https://ilhan-mstf.github.io/omnitool/LICENSE" class="hover:text-white transition-colors focus:text-white">License</a>
         </div>
     </footer>
 
@@ -227,9 +282,7 @@
             navigator.clipboard.writeText(text);
             const originalIcon = btn.innerHTML;
             btn.innerHTML = '<svg class="w-4 h-4 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>';
-            setTimeout(() => {
-                btn.innerHTML = originalIcon;
-            }, 2000);
+            setTimeout(() => { btn.innerHTML = originalIcon; }, 2000);
         }
 
         // OS Detection to highlight relevant section
