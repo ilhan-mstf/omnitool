@@ -147,9 +147,14 @@
                     <div class="space-y-6">
                         <div>
                             <p class="text-xs font-black text-accent uppercase tracking-widest mb-2">Method 1: Homebrew (Pro)</p>
-                            <code class="block p-3 bg-black rounded-lg border border-white/5 text-sm text-zinc-300 overflow-x-auto">
-                                brew install --cask ilhan-mstf/tap/omnitool
-                            </code>
+                            <div class="relative group/code">
+                                <code class="block p-3 bg-black rounded-lg border border-white/5 text-sm text-zinc-300 overflow-x-auto">
+                                    brew install --cask ilhan-mstf/tap/omnitool
+                                </code>
+                                <button onclick="copyToClipboard(this, 'brew install --cask ilhan-mstf/tap/omnitool')" class="absolute top-2 right-2 p-1.5 bg-zinc-800 text-zinc-400 rounded-md opacity-0 group-hover/code:opacity-100 transition-all hover:bg-zinc-700 hover:text-white">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3"></path></svg>
+                                </button>
+                            </div>
                         </div>
 
                         <div>
@@ -162,9 +167,14 @@
                         <div>
                             <p class="text-xs font-black text-zinc-500 uppercase tracking-widest mb-2">Method 3: Terminal</p>
                             <p class="text-sm text-zinc-400 mb-2">If blocked, run this to un-quarantine:</p>
-                            <code class="block p-3 bg-black rounded-lg border border-white/5 text-[10px] text-zinc-500 overflow-x-auto">
-                                sudo xattr -rd com.apple.quarantine /Applications/Omnitool.app
-                            </code>
+                            <div class="relative group/code">
+                                <code class="block p-3 bg-black rounded-lg border border-white/5 text-[10px] text-zinc-500 overflow-x-auto">
+                                    sudo xattr -rd com.apple.quarantine /Applications/Omnitool.app
+                                </code>
+                                <button onclick="copyToClipboard(this, 'sudo xattr -rd com.apple.quarantine /Applications/Omnitool.app')" class="absolute top-2 right-2 p-1.5 bg-zinc-800 text-zinc-400 rounded-md opacity-0 group-hover/code:opacity-100 transition-all hover:bg-zinc-700 hover:text-white">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3"></path></svg>
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -186,9 +196,14 @@
                                 Linux (.AppImage)
                             </p>
                             <p class="text-sm text-zinc-400 mb-2">Make the AppImage executable before running:</p>
-                            <code class="block p-3 bg-black rounded-lg border border-white/5 text-sm text-zinc-300">
-                                chmod +x Omnitool.AppImage
-                            </code>
+                            <div class="relative group/code">
+                                <code class="block p-3 bg-black rounded-lg border border-white/5 text-sm text-zinc-300 overflow-x-auto">
+                                    chmod +x Omnitool.AppImage
+                                </code>
+                                <button onclick="copyToClipboard(this, 'chmod +x Omnitool.AppImage')" class="absolute top-2 right-2 p-1.5 bg-zinc-800 text-zinc-400 rounded-md opacity-0 group-hover/code:opacity-100 transition-all hover:bg-zinc-700 hover:text-white">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3"></path></svg>
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -207,6 +222,16 @@
     </footer>
 
     <script>
+        // Clipboard functionality
+        function copyToClipboard(btn, text) {
+            navigator.clipboard.writeText(text);
+            const originalIcon = btn.innerHTML;
+            btn.innerHTML = '<svg class="w-4 h-4 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>';
+            setTimeout(() => {
+                btn.innerHTML = originalIcon;
+            }, 2000);
+        }
+
         // OS Detection to highlight relevant section
         window.onload = () => {
             const isMac = navigator.platform.toUpperCase().indexOf('MAC') >= 0;
